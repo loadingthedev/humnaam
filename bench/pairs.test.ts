@@ -50,3 +50,11 @@ test("measures precision and recall at a threshold", () => {
     f1: 0.5,
   });
 });
+
+test("reads a model answer strictly", async () => {
+  const { parse } = await import("./llm");
+  expect(parse({ answers: { same: { type: "noul", noul: 0.96 } } })).toBe(0.96);
+  expect(parse({ answers: { same: { type: "noul", noul: "yes" } } })).toBeNull();
+  expect(parse({ answers: { same: { type: "choice", choice: "yes" } } })).toBeNull();
+  expect(parse({ answers: {} })).toBeNull();
+});

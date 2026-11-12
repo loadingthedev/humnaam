@@ -35,6 +35,7 @@
     "format": "oxfmt",
     "bench": "bun bench/run.ts",
     "bench:pairs": "bun bench/pairs.ts",
+    "bench:llm": "bun bench/llm.ts",
     "eval:variants": "bun scripts/eval-variants.ts",
     "demo": "bun demo/index.html",
     "demo:build": "bun build demo/index.html --outdir demo/dist --minify",

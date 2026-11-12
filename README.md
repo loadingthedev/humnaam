@@ -72,6 +72,30 @@ With each matcher's cut-off raised until it reaches 95% precision on the develop
 
 On the development set (6,871 matches, 6,521 non-matches) humnaam scores precision 96.7 and recall 76.6. Every weight and cut-off was tuned on the development set only. The test set was run twice: once after the first round of tuning (precision 96.2, recall 75.2), and once after a second round that fixed ranking errors found while building the demo. No change was made in response to a test result.
 
+### Against an AI model
+
+    bun run bench:llm            # the development set
+    bun run bench:llm -- --test  # the held-back test set
+
+The same pairs were put to [Jev 1.14](https://openrouter.ai/typesafe/jev-1.14) (`typesafe/jev-1.14`, resolved by OpenRouter to `typesafe/jev-1.14-20261014`), a decision model that returns the probability of "yes" for a question. It was run through OpenRouter on 2026-11-12, one pair per request, with this question: "Are these two names the same person's name?"
+
+Held-back test set (2,951 pairs):
+
+| Matcher                                      | Precision | Recall | F1   | Cost per 1,000 pairs | Time per pair                  |
+| -------------------------------------------- | --------- | ------ | ---- | -------------------- | ------------------------------ |
+| humnaam at 0.26                              | 97.2      | 74.0   | 84.0 | none                 | about 10 microseconds          |
+| Jev 1.14, yes at 0.50 or more                | 96.4      | 74.2   | 83.8 | $0.0155              | 474 ms                         |
+| Jev 1.14, yes at 0.47 or more                | 96.1      | 75.0   | 84.2 | $0.0155              | 474 ms                         |
+| humnaam first, Jev 1.14 for the unsure pairs | 96.4      | 77.7   | 86.0 | $0.0050              | 32.1% of pairs go to the model |
+
+- The model and the library score about the same. The library needs no network call and no key, and it is tens of thousands of times faster.
+- Used together they do better than either alone. In the last row humnaam decides every pair it scores below 0.10 (no) or at 0.25 and above (yes), and only the pairs in between go to the model. That costs a third of asking the model about everything.
+- The question, the 0.47 cut-off (the lowest with 95% precision) and the 0.10 to 0.25 band were all fixed on the development set. The test set was then run once. On the development set the four rows score F1 85.5, 83.7, 84.0 and 87.1.
+- Every answer was a clear probability: 0 of 16,343 answers had to be counted as wrong for being unreadable. An unreadable answer would count as wrong.
+- The time is the average for one request with 16 requests in flight. The cost is what OpenRouter charged.
+- Every answer is in `bench/llm/jev-1.14.jsonl`, so the table can be rebuilt without a key and without paying. All 16,343 answers cost $0.25.
+- The model may have seen the OFAC list in training, which could flatter its score. The hybrid row uses the model's answers from the full run; it was not run as a separate pipeline.
+
 ### Where the pairs come from
 
 The individuals on the OFAC SDN list (US Treasury, `SDN.XML`, published 2026-11-09; checksum in `bench/pairs/source.json`).
