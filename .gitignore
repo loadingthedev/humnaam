@@ -1,6 +1,9 @@
 # dependencies (bun install)
 node_modules
 
+# raw downloads (OFAC, Dakshina, Aksharantar); the derived pairs in bench/pairs are committed
+data
+
 # output
 out
 dist

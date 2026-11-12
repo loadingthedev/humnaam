@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>humnaam: do two names belong to the same person?</title>
+    <meta
+      name="description"
+      content="A small TypeScript library that decides whether two South Asian or Arabic names written in Latin letters are the same person's name."
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <h1>
+        humnaam
+        <span class="scripts" aria-hidden="true">
+          <span lang="hi">हमनाम</span>
+          <span lang="ur" dir="rtl">ہم نام</span>
+        </span>
+      </h1>
+      <p class="lede">
+        Decides whether two names written in Latin letters are the same person's name. Built for
+        South Asian and Arabic names, where <i>Mohammed</i>, <i>Muhammad</i> and <i>Mohd</i> are one
+        name.
+      </p>
+      <nav aria-label="Project">
+        <a href="https://github.com/loadingthedev/humnaam">GitHub</a>
+        <a href="https://www.npmjs.com/package/humnaam">npm</a>
+      </nav>
+    </header>
+
+    <main>
+      <section aria-labelledby="search-title">
+        <h2 id="search-title"><span class="num" aria-hidden="true">01</span> Search</h2>
+        <p class="hint">
+          What you type is scored against <span id="count"></span> names from a public sanctions
+          list. Scores are not percentages: <span class="mono" id="likely"></span> or more is
+          already a likely match, and 1 means the same words.
+        </p>
+        <label for="q">Type a name</label>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" autocapitalize="words" />
+        <div class="examples">
+          <span class="caption" id="examples-label">Examples</span>
+          <ul aria-labelledby="examples-label" id="examples"></ul>
+        </div>
+        <p class="caption" id="legend-label">How words pair</p>
+        <dl class="legend" aria-labelledby="legend-label">
+          <div class="how-same">
+            <dt>same</dt>
+            <dd>identical</dd>
+          </div>
+          <div class="how-spelling">
+            <dt>spelling</dt>
+            <dd>variant spelling</dd>
+          </div>
+          <div class="how-short">
+            <dt>short</dt>
+            <dd>abbreviation</dd>
+          </div>
+          <div class="how-initial">
+            <dt>initial</dt>
+            <dd>a letter for the word</dd>
+          </div>
+          <div class="how-joined">
+            <dt>joined</dt>
+            <dd>written together or apart</dd>
+          </div>
+          <div class="how-close">
+            <dt>close</dt>
+            <dd>similar, not a known variant</dd>
+          </div>
+          <div class="how-different">
+            <dt>different</dt>
+            <dd>a conflicting word</dd>
+          </div>
+          <div class="how-missing">
+            <dt>missing</dt>
+            <dd>no counterpart</dd>
+          </div>
+        </dl>
+        <p id="status" class="status" aria-live="polite"></p>
+        <ol id="results" class="results"></ol>
+      </section>
+
+      <section aria-labelledby="compare-title">
+        <h2 id="compare-title"><span class="num" aria-hidden="true">02</span> Compare</h2>
+        <div class="pair">
+          <div>
+            <label for="a">First name</label>
+            <input id="a" type="text" autocomplete="off" spellcheck="false" />
+          </div>
+          <div>
+            <label for="b">Second name</label>
+            <input id="b" type="text" autocomplete="off" spellcheck="false" />
+          </div>
+        </div>
+        <output id="verdict" for="a b" class="verdict" aria-live="polite"></output>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        The names are the <span id="footer-count">full names</span> of individuals on the US
+        Treasury OFAC Specially Designated Nationals list, published <time id="published"></time>,
+        used as public test data. A match here is a similarity between names, not an identification
+        of a person.
+      </p>
+      <p>Everything runs in your browser. Nothing you type is sent anywhere.</p>
+    </footer>
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

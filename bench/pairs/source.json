@@ -1,0 +1,14 @@
+{
+  "url": "https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML",
+  "publishDate": "11/09/2026",
+  "sha256": "329a9b9c6e554518639e979c28c6867d00b72b4175352dd8869766092bb3ed0c",
+  "individuals": 7541,
+  "dev": {
+    "matches": 6871,
+    "nonMatches": 6521
+  },
+  "test": {
+    "matches": 1662,
+    "nonMatches": 1289
+  }
+}
