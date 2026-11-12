@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing
 
 jobs:
   publish:
@@ -22,7 +22,6 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Tag must match package.json
         run: test "v$(jq -r .version package.json)" = "$GITHUB_REF_NAME"
+      # No token: npm trusts this workflow through OIDC (set up once with `npm trust github`).
       # prepublishOnly runs the tests and the build.
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --access public
